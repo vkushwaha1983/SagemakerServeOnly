@@ -1,0 +1,23 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "Installing wget and boto3"
+      - pip3 install wget
+      - pip3 install boto3
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+  build:
+    commands:
+      - echo "Running training.py"
+      - python3 trainingjob/training.py
+  post_build:
+    commands:
+      - echo "Cleaning"
+      
+artifacts:
+  files:
+    - '**/*'
