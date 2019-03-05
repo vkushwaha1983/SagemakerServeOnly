@@ -35,7 +35,7 @@ start = time.time()
         
 ###################hosting endpoint#########
 # Creating Model with Inference image
-
+sm = boto3.client('sagemaker')
 r_job='sagemakerserveonlymodel'
 role='arn:aws:iam::237320763645:role/service-role/AmazonSageMaker-ExecutionRole-20190128T145156'
 
