@@ -17,29 +17,31 @@ account = '237320763879'
 
 print(role)
 start = time.time()
-s3 = boto3.client('s3')
-#Download *.RData to local environment from S3
-bucket='sagemaker-batchdeploy'
-key='mars_model.RData'
-s3.Bucket(bucket).download_file(key, 'mars_model.RData')
 
-#Convert RData to *.tar.gz
-model_file_name='mars_model.RData'
-!tar czvf model_.tar.gz $model_file_name
+# s3 = boto3.client('s3')
+# #Download *.RData to local environment from S3
+# bucket='sagemaker-batchdeploy'
+# key='mars_model.RData'
+# s3.Bucket(bucket).download_file(key, 'mars_model.RData')
 
-# upload training dataset to S3
+# #Convert RData to *.tar.gz
+# model_file_name='mars_model.RData'
+# !tar czvf model.tar.gz $model_file_name
 
-trained_model = 'model_.tar.gz'
-boto3.Session().resource('s3').Bucket(bucket).Object(os.path.join(prefix, 'train', trained_model)).upload_file(trained_model)
+# # upload training dataset to S3
+
+# trained_model = 'model.tar.gz'
+# boto3.Session().resource('s3').Bucket(bucket).Object(os.path.join(prefix, 'train', trained_model)).upload_file(trained_model)
         
 ###################hosting endpoint#########
 # Creating Model with Inference image
 
 r_job='sagemakerserveonlymodel'
-
+role='arn:aws:iam::237320763645:role/service-role/AmazonSageMaker-ExecutionRole-20190128T145156'
 
 r_image='237320763645.dkr.ecr.ap-south-1.amazonaws.com/sagemakerserveonly:latest'
-r_trainjob='s3://sagemaker-batchdeploy/sagemaker/mars/compress/train/model.tar.gz'
+#r_trainjob='s3://sagemaker-batchdeploy/sagemaker/mars/compress/train/model.tar.gz'
+r_trainjob='s3://sagemaker-batchdeploy/model.tar.gz'
 
 r_hosting_container = {
     'Image': r_image,
